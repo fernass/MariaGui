@@ -20,13 +20,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void update_data_TableView(void);
-    int save_project_state();
-    int restore_project_state();
     void init_Gui(void);
 
 private slots:
     int newProject(void);
     int openCSV(void);
+    int save_project_state_as();
+    int save_project_state();
+    int restore_project_state();
     int openCategoryEditor(void);
     void update_category_TableView(void);
     void applyCategories(void);
@@ -34,6 +35,7 @@ private slots:
     void showStatisticsWindow(void);
     void editCategory(void);
     void deleteCategory(void);
+    void exportData(void);
 
 private:
     Ui::MainWindow *ui;
@@ -42,8 +44,7 @@ private:
     csv_reader* reader;
     QStandardItemModel* modelDatasets;
     QStandardItemModel* modelCategories;
-//    QVector<dataset*> data_vec;
-//    QVector<category*> categories_vec;
 
+    QString saveFile; //name of project file. Only available, if saved as before
 };
 #endif // MAINWINDOW_H

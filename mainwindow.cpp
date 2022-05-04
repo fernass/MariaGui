@@ -12,10 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     init_Gui();
+
+    saveFile = "";
+
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::newProject);
     connect(ui->actionimport, &QAction::triggered, this, &MainWindow::openCSV);
     connect(ui->action_ffnen, &QAction::triggered, this, &MainWindow::restore_project_state);
-    connect(ui->actionSpeichern_unter, &QAction::triggered, this, &MainWindow::save_project_state);
+    connect(ui->actionSpeichern_unter, &QAction::triggered, this, &MainWindow::save_project_state_as);
+    connect(ui->actionSpeichern, &QAction::triggered, this, &MainWindow::save_project_state);
     connect(ui->pbNew, &QPushButton::released,this, &MainWindow::openCategoryEditor);
     connect(this->data, &globaldata::categotries_changed, this, &MainWindow::update_category_TableView);
     connect(ui->pbApplyCat, &QPushButton::released, this, &MainWindow::applyCategories);
@@ -23,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(header, SIGNAL(sectionClicked(int)),this, SLOT(sortColumn(int)));
     connect(ui->pbEdit, &QPushButton::released, this, &MainWindow::editCategory);
     connect(ui->pbDeleteCategory, &QPushButton::released, this, &MainWindow::deleteCategory);
+    connect(ui->pbExport, &QPushButton::released, this, &MainWindow::exportData);
+    connect(ui->actionSchlie_en, &QAction::triggered, this, &MainWindow::close);
 
 }
 
@@ -60,6 +66,9 @@ void MainWindow::init_Gui(void)
     ui->tvCategories->setColumnWidth(1,400);
 //    ui->tvCategories->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tvCategories->horizontalHeader()->setStretchLastSection(true);
+
+    ui->pbApplySel->setDisabled(true);
+    ui->pbHideSelected->setDisabled(true);
 
     data = new globaldata();
 }
@@ -254,9 +263,9 @@ void MainWindow::sortColumn(int index)
 
 //#############################################################################
 //#############################################################################
-int MainWindow::save_project_state()
+int MainWindow::save_project_state_as()
 {
-    QString saveFile = QFileDialog::getSaveFileName(this, tr("Datei speichern unter ..."), "/", tr("Maria-Dateien (*.mar)"));
+    saveFile = QFileDialog::getSaveFileName(this, tr("Datei speichern unter ..."), "/", tr("Maria-Dateien (*.mar)"));
     QFile file(saveFile);
     if(file.open(QIODevice::WriteOnly))
     {
@@ -279,11 +288,40 @@ int MainWindow::save_project_state()
 
 //#############################################################################
 //#############################################################################
+int MainWindow::save_project_state()
+{
+    if(saveFile.isEmpty())
+    {
+        save_project_state_as();
+        return 0;
+    }
+
+    QFile file(saveFile);
+    if(file.open(QIODevice::WriteOnly))
+    {
+        QDataStream stream(&file);
+        data->save_data(stream);
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Datei kann nicht geöffnet werden");
+        msgBox.exec();
+        return -1;
+    }
+
+    file.flush();
+    file.close();
+
+    return 0;
+}
+//#############################################################################
+//#############################################################################
 int MainWindow::restore_project_state()
 {
-    QString openFile = QFileDialog::getOpenFileName(this, tr("Projektdatei öffnen"), "/", tr("Maria-Dateien (*.mar)"));
+    saveFile = QFileDialog::getOpenFileName(this, tr("Projektdatei öffnen"), "/", tr("Maria-Dateien (*.mar)"));
 
-    QFile file(openFile);
+    QFile file(saveFile);
     if(file.open(QIODevice::ReadOnly))
     {
         QDataStream stream(&file);
@@ -342,4 +380,30 @@ void MainWindow::deleteCategory(void)
     modelCategories->takeRow(row);
     data->delete_category(cat);
 
+}
+
+//#############################################################################
+//#############################################################################
+void MainWindow::exportData(void)
+{
+//    QString exportFile = QFileDialog::getSaveFileName(this, tr("Datei für den Export:"), "/", tr("csv-Dateie (*.csv)"));
+    QFileDialog fileDialog(this, "Export-Datei:", "/", tr("csv-Dateie (*.csv)"));
+    fileDialog.setDefaultSuffix("csv");
+    fileDialog.exec();
+    QString exportFile = fileDialog.selectedFiles().first();
+
+    QFile file(exportFile);
+    file.open(QIODevice::WriteOnly);
+    QTextStream stream(&file);
+    for(auto& ds : data->get_data_vec())
+    {
+        stream << ds->get_date() << ";" << ds->get_rating() << ";" << ds->get_message() << ";";
+        for(auto& cat : ds->get_category())
+        {
+            stream << cat->get_type() << ";";
+        }
+        stream << "\n";
+    }
+    file.flush();
+    file.close();
 }
