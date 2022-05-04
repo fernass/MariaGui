@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1228</width>
+    <height>657</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="hlMain">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <layout class="QVBoxLayout" name="vlDatasets">
+        <item>
+         <widget class="QLabel" name="lblDatasets">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <property name="text">
+           <string>Datensätze</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableView" name="tvDatasets"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbStatistics">
+          <property name="text">
+           <string>Statistik</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbExport">
+          <property name="text">
+           <string>Export</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="vlButtons">
+        <item>
+         <widget class="QPushButton" name="pbApplyCat">
+          <property name="text">
+           <string>Kategorien
+anwenden</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbApplySel">
+          <property name="text">
+           <string>Auswahl
+anwenden</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignTop">
+         <widget class="QPushButton" name="pbHideSelected">
+          <property name="text">
+           <string>Auswahl
+ausblenden</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="vlCategories">
+        <item>
+         <widget class="QLabel" name="lblcategories">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="text">
+           <string>Kategorien</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableView" name="tvCategories"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbNew">
+          <property name="text">
+           <string>Neue Kategorie</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbEdit">
+          <property name="text">
+           <string>Kategorie bearbeiten</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pbDeleteCategory">
+          <property name="text">
+           <string>Kategorie entfernen</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1228</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuDatei">
+    <property name="title">
+     <string>Datei</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="action_ffnen"/>
+    <addaction name="actionSpeichern"/>
+    <addaction name="actionSpeichern_unter"/>
+    <addaction name="separator"/>
+    <addaction name="actionimport"/>
+    <addaction name="separator"/>
+    <addaction name="actionSchlie_en"/>
+   </widget>
+   <addaction name="menuDatei"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionNeu">
+   <property name="text">
+    <string>Neu</string>
+   </property>
+  </action>
+  <action name="action_ffnen">
+   <property name="text">
+    <string>Öffnen...</string>
+   </property>
+  </action>
+  <action name="actionSpeichern">
+   <property name="text">
+    <string>Speichern</string>
+   </property>
+  </action>
+  <action name="actionSpeichern_unter">
+   <property name="text">
+    <string>Speichern unter...</string>
+   </property>
+  </action>
+  <action name="actionimport">
+   <property name="text">
+    <string>import...</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>Neu...</string>
+   </property>
+  </action>
+  <action name="actionSchlie_en">
+   <property name="text">
+    <string>Schließen</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
